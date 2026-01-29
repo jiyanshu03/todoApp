@@ -1,17 +1,29 @@
-import express from 'express';
-import { PORT } from './config/serverConfig.js';
-import cors from 'cors';
+import dotenv from "dotenv";
+dotenv.config();
+
+import express from "express";
+import cors from "cors";
+
+import { connectDB } from "./config/db.js";
+import { authRoutes } from "./routes/authRoutes.js";
+import { boardRoutes } from "./routes/boardRoutes.js";
+import { todoRoutes } from "./routes/todoRoutes.js";
+
 const app = express();
 
-app.use(express.json());
+
+connectDB();
+
+
 app.use(cors());
-app.use(express.urlencoded());
-
-app.get('/ping', (req, res) => {
-    return res.json({ message: 'pong' });
-});
+app.use(express.json());
 
 
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+app.use("/api/auth", authRoutes);
+app.use("/api/boards", boardRoutes);
+app.use("/api/todos", todoRoutes);
+
+
+app.listen(process.env.PORT, () =>
+  console.log(`Server running on port ${process.env.PORT}`)
+);
