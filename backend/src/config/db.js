@@ -5,7 +5,8 @@ export const connectDB = async () => {
     await mongoose.connect(process.env.MONGO_URI);
     console.log("MongoDB connected");
   } catch (error) {
-    console.error(error.message);
-    process.exit(1);
+    console.error("MongoDB connection error:", error.message);
+    // On Vercel, don't exit so the function can return a proper error response
+    if (!process.env.VERCEL) process.exit(1);
   }
 };

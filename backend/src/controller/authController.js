@@ -17,18 +17,26 @@ export const registerUser = async (req, res) => {
   }
 };
 
-export const loginUser = async (req, res) => {
-  const { email, password } = req.body;
-  if (!email || !password)
-    return res.status(400).json({ message: "Email and password required" });
-  const user = await User.findOne({ email });
-  if (!user)
-    return res.status(400).json({ message: "User not found" });
+export const loginUser = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+    if (!email || !password)
+      return res.status(400).json({ message: "Email and password required" });
 
-  const ok = await bcrypt.compare(password, user.password);
-  if (!ok)
-    return res.status(400).json({ message: "Wrong password" });
+    if (!process.env.JWT_SECRET)
+      return res.status(500).json({ message: "Server misconfigured: JWT_SECRET not set" });
 
-  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-  res.json({ token });
+    const user = await User.findOne({ email });
+    if (!user)
+      return res.status(400).json({ message: "User not found" });
+
+    const ok = await bcrypt.compare(password, user.password);
+    if (!ok)
+      return res.status(400).json({ message: "Wrong password" });
+
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+    res.json({ token });
+  } catch (err) {
+    next(err);
+  }
 };

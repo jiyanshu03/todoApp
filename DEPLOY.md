@@ -33,9 +33,9 @@ You will create **two Vercel projects** (backend and frontend) from the same rep
    - **Framework Preset:** leave as **Other**.
    - **Build Command:** leave empty (or set to `echo 'no build'` if Vercel shows an error).
    - **Output Directory:** leave empty (the backend is a serverless API, not a static site).
-4. **Environment Variables:**
-   - **Name:** `MONGO_URI`  
-   - **Value:** your full MongoDB connection string from Step 1  
+4. **Environment Variables:** add these for the backend.
+   - **`MONGO_URI`** = your full MongoDB connection string from Step 1  
+   - **`JWT_SECRET`** = a long random string (e.g. 32+ characters) used to sign login tokens. If this is missing, login and auth will return 500.  
    - **Environment:** Production (and Preview if you want).
 5. Click **Deploy** and wait for it to finish.
 6. When it’s done, open the deployment URL (e.g. `https://todo-app-backend-xxxx.vercel.app`).
@@ -82,6 +82,11 @@ You will create **two Vercel projects** (backend and frontend) from the same rep
 
 - `VITE_API_URL` must be exactly: `https://<your-backend>.vercel.app/api` (with `/api`, no trailing slash).
 - Test in the browser: open `https://<your-backend>.vercel.app/api` – you must see `{"ok":true,"message":"Todo API"}`.
+
+**Backend returns 500**
+
+- **JWT_SECRET:** Add `JWT_SECRET` to the backend project’s environment variables on Vercel (a long random string, e.g. 32+ characters). Login and auth will fail with 500 if it’s missing.
+- **MONGO_URI:** Ensure `MONGO_URI` is set correctly and MongoDB Atlas allows connections from anywhere (`0.0.0.0/0`). Check the backend’s **Runtime Logs** on Vercel for the exact error.
 
 **CORS errors in the browser**
 

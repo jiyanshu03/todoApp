@@ -31,6 +31,12 @@ app.use("/api/auth", authRoutes);
 app.use("/api/boards", boardRoutes);
 app.use("/api/todos", todoRoutes);
 
+// Global error handler: prevents unhandled errors from returning 500 with no body
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(500).json({ message: err.message || "Something went wrong" });
+});
+
 const PORT = process.env.PORT || 3000;
 
 // On Vercel, the platform runs the app; locally we start the server.
