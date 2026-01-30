@@ -17,6 +17,11 @@ connectDB();
 app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 
+// Root: so visiting the backend URL doesn’t show "Cannot GET /"
+app.get("/", (req, res) => {
+  res.json({ ok: true, message: "Todo API", docs: "/api" });
+});
+
 // Health check: open this URL in a browser to confirm the backend is reachable
 app.get("/api", (req, res) => {
   res.json({ ok: true, message: "Todo API" });
