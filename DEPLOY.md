@@ -30,8 +30,9 @@ You will create **two Vercel projects** (backend and frontend) from the same rep
 2. **Import** your Git repository (e.g. GitHub).
 3. **Configure Project:**
    - **Root Directory:** click **Edit** → set to **`backend`** → **Continue**.
-   - **Framework Preset:** leave as **Other** (Vercel will detect Express).
-   - **Build and Output:** leave defaults (no build command needed).
+   - **Framework Preset:** leave as **Other**.
+   - **Build Command:** leave empty (or set to `echo 'no build'` if Vercel shows an error).
+   - **Output Directory:** leave empty (the backend is a serverless API, not a static site).
 4. **Environment Variables:**
    - **Name:** `MONGO_URI`  
    - **Value:** your full MongoDB connection string from Step 1  
