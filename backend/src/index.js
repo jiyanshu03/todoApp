@@ -11,20 +11,28 @@ import { todoRoutes } from "./routes/todoRoutes.js";
 
 const app = express();
 
-
 connectDB();
 
-
-app.use(cors());
+// Reflect request origin so browsers allow requests with Authorization header (no wildcard with credentials).
+app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 
+// Health check: open this URL in a browser to confirm the backend is reachable
+app.get("/api", (req, res) => {
+  res.json({ ok: true, message: "Todo API" });
+});
 
 app.use("/api/auth", authRoutes);
 app.use("/api/boards", boardRoutes);
 app.use("/api/todos", todoRoutes);
 
-
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () =>
-  console.log(`Server running on port ${PORT}`)
-);
+
+// On Vercel, the platform runs the app; locally we start the server.
+if (!process.env.VERCEL) {
+  app.listen(PORT, () =>
+    console.log(`Server running on port ${PORT}`)
+  );
+}
+
+export default app;
