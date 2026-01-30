@@ -17,7 +17,11 @@ function Login() {
       localStorage.setItem("token", res.data.token);
       navigate("/boards");
     } catch (err) {
-      setError(err.response?.data?.message || "Login failed");
+      const msg = err.response?.data?.message;
+      if (msg) setError(msg);
+      else if (err.code === "ERR_NETWORK" || !err.response)
+        setError("Cannot reach server. Is the backend running at http://localhost:3000?");
+      else setError(`Login failed (${err.response?.status || "error"})`);
     }
   };
 

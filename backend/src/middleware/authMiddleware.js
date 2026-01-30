@@ -6,6 +6,9 @@ export const authMiddleware = (req, res, next) => {
   if (!token)
     return res.status(401).json({ message: "No token provided" });
 
+  if (!process.env.JWT_SECRET)
+    return res.status(500).json({ message: "Server misconfigured: JWT_SECRET not set" });
+
   try {
     req.user = jwt.verify(token, process.env.JWT_SECRET);
     next();

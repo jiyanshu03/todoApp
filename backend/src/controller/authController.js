@@ -23,9 +23,6 @@ export const loginUser = async (req, res, next) => {
     if (!email || !password)
       return res.status(400).json({ message: "Email and password required" });
 
-    if (!process.env.JWT_SECRET)
-      return res.status(500).json({ message: "Server misconfigured: JWT_SECRET not set" });
-
     const user = await User.findOne({ email });
     if (!user)
       return res.status(400).json({ message: "User not found" });

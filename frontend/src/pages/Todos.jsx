@@ -41,8 +41,13 @@ function Todos() {
   const [submitting, setSubmitting] = useState(false);
 
   const loadTodos = useCallback(async () => {
-    const res = await api.get(`/todos/${boardId}`);
-    setTodos(res.data);
+    try {
+      const res = await api.get(`/todos/${boardId}`);
+      setTodos(res.data);
+    } catch (err) {
+      console.error(err);
+      setTodos([]);
+    }
   }, [boardId]);
 
   const loadBoardName = useCallback(async () => {

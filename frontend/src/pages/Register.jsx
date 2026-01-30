@@ -16,7 +16,11 @@ function Register() {
       });
       navigate("/login");
     } catch (err) {
-      setError(err.response?.data?.message || "Registration failed");
+      const msg = err.response?.data?.message;
+      if (msg) setError(msg);
+      else if (err.code === "ERR_NETWORK" || !err.response)
+        setError("Cannot reach server. Is the backend running at http://localhost:3000?");
+      else setError(`Registration failed (${err.response?.status || "error"})`);
     }
   };
 
